@@ -13,6 +13,9 @@ import GymIcon from "../../public/assets/icons/gym.png";
 import forwardIcon from "../../public/assets/icons/right-arrow.png";
 import backwardIcon from "../../public/assets/icons/left-arrow.png";
 import SWIPER from '@/components/SWIPER';
+import { doc, setDoc } from 'firebase/firestore';
+import { db } from '@/firebase';
+import {useDocument } from "react-firebase-hooks/firestore";
 type Props = {}
 const Main = styled.div`
   margin-top: 30px;
@@ -91,10 +94,10 @@ const MoveSlider = styled.div`
 `;
 
 const SecondSection = ({exercises , setexerciseName , exerciseName}:any ) => {
-  
-  
-  console.log(exercises)
+
+ 
   const SlideRef: any = useRef();
+  console.log(exercises)
   const swiper = useSwiper();
 
   const handleNext = () => {
@@ -104,6 +107,16 @@ const SecondSection = ({exercises , setexerciseName , exerciseName}:any ) => {
   const handlePrev = () => {
     SlideRef.current.swiper.slidePrev();
   };
+  const sendData = async () => {
+
+    await setDoc(doc(db, "List of bodyparts", "result" ), {
+      firstArray: exercises,
+    });  
+    }
+  const [value, loading, error] = useDocument(doc(db, "List of bodyparts", "result"));
+  if(error) return <h1>error</h1>
+  if(loading) return <h1>loading</h1>
+  if(value) console.log("valueeeee", value?.data()?.firstArray)
   return (
     <Main>
     <Text>
@@ -116,34 +129,34 @@ const SecondSection = ({exercises , setexerciseName , exerciseName}:any ) => {
     <CardsBox >
       
         <SWIPER SlideRef = {SlideRef} >
-          {exercises.map((exercise:string) => {
-            return (
+          { value?.data()?.firstArray?.map((exercise:any , index:number) => {
+            return(
               <SwiperSlide
-               onClick={() => {
-                setexerciseName(exercise)
-                console.log(setexerciseName)
-                window.scrollTo({top:1800 , left:100,behavior:"smooth"})
-              }} className="swiper-slide pl-[1.9rem]" key={exercise}>
-                <ExerciseCard className={exerciseName === exercise ? "border-t-[4px] border-red-500":""}>
-                  {/* <Link
-                    className="flex flex-col gap-5 justify-center items-center w-full h-full"
-                    href={"/Exercises"}
-                  > */}
-                    <div>
-                      <Image
-                        priority
-                        height={50}
-                        width={50}
-                        src={GymIcon}
-                        alt={"icon"}
-                      />
-                    </div>
-                    <ExercisesName>{exercise}</ExercisesName>
-                  {/* </Link> */}
-                </ExerciseCard>
-              </SwiperSlide>
-          );
-        })}
+              onClick={() => {
+               setexerciseName(exercise)
+               console.log(setexerciseName)
+               window.scrollTo({top:1800 , left:100,behavior:"smooth"})
+             }} className="swiper-slide pl-[1.9rem]" key={index}>
+               <ExerciseCard className={exerciseName === exercise ? "border-t-[4px] border-red-500":""}>
+                 {/* <Link
+                   className="flex flex-col gap-5 justify-center items-center w-full h-full"
+                   href={"/Exercises"}
+                 > */}
+                   <div>
+                     <Image
+                       priority
+                       height={50}
+                       width={50}
+                       src={GymIcon}
+                       alt={"icon"}
+                     />
+                   </div>
+                   <ExercisesName>{exercise}</ExercisesName>
+                 {/* </Link> */}
+               </ExerciseCard>
+             </SwiperSlide>
+            )
+          })}
         </SWIPER>
       <MoveSlider>
         <Image
@@ -164,10 +177,16 @@ const SecondSection = ({exercises , setexerciseName , exerciseName}:any ) => {
       />
     </MoveSlider>
     </CardsBox>
-    
+    <button className="bg-red-500 m-10"
+      onClick={() => {
+        sendData();
+        console.log("doneeeeeeeeeeeeeee");
+      }}
+      >Send Data</button>
   </Main>
   )
 }
+
 
 
 export default SecondSection

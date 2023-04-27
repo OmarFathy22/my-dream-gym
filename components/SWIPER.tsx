@@ -35,8 +35,8 @@ const SWIPER = ({SlideRef , children}:any) => {
      },
      1300: {
        width: 1300,
-       slidesPerView: 4,
-       slidesPerGroup:4,
+       slidesPerView: 3,
+       slidesPerGroup:3,
 
      },
    }}

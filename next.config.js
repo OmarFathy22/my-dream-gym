@@ -1,13 +1,13 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  reactStrictMode: true,
+  images: {
+   domains:['d205bpvrqc9yn1.cloudfront.net' , 'i.ytimg.com']
+    
+  },
   compiler: {
     // Enables the styled-components SWC transform
+    reactStrictMode: true,
     styledComponents: true
-  },
-  images: {
-   domains:['d205bpvrqc9yn1.cloudfront.net']
-    
   },
 }
 
