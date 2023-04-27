@@ -3,11 +3,13 @@ import '@/styles/globals.css'
 import { configureStore } from '@reduxjs/toolkit';
 import type { AppProps } from 'next/app'
 import selectedexercise from './features/selectedExercise'
+import exerciseName from './features/exerciseName';
 import { Provider } from 'react-redux';
 
   const store = configureStore({
     reducer:{
       exercise:selectedexercise,
+      exercisename:exerciseName,
     }
   })
 export default function App({ Component, pageProps }: AppProps) {

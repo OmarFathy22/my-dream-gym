@@ -10,14 +10,16 @@ import { doc, setDoc } from "firebase/firestore";
 import {db} from '../../firebase'
 import { useDocument } from 'react-firebase-hooks/firestore';
 import {SelectedExercise} from "../features/selectedExercise"
+import {EXERCISENAME} from "../features/exerciseName"
 import { useDispatch, useSelector } from 'react-redux';
-
 export const ExercisesContainer = styled.div`
   width: 100%;
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
   gap: 30px;
+  position: relative;
+
 `
 
 export const ExerciseCard = styled.div`
@@ -52,22 +54,26 @@ export const ExerciseName = styled.button`
   text-decoration: none;
   display: inline-block;
   margin: 4px 2px;
-  cursor: pointer;
   border-radius: 16px;
 `
-const ThirdSection = ({exerciseName }: any) => {
-  const [value, loading, error] = useDocument(doc(db, "List by body part", exerciseName));
+const ThirdSection = () => {
+
+  const Item = useSelector((state:any) => state.exercisename.value)
+  const Item2 = useSelector((state:any) => state.exercise.value)
+  // const SelectedExercise = useSelector((state:any) => state.exercise.value)
+  const [value, loading, error] = useDocument(doc(db, "List by body part", Item));
   const [ArrayLength, setArrayLength] = useState(1)
   const [isCounted, setisCounted] = useState(false)
   const dispatch = useDispatch();
   const router = useRouter();
   const uId = router.query;
   const [bodyPart, setbodyPart] = useState([])
+  console.log("this is Item value" ,Item2);
   // useEffect(() => {
   //   const renderingExercises = async() => {
   //     const options2 = {
   //       method: 'GET',
-  //       url: `https://exercisedb.p.rapidapi.com/exercises/bodyPart/${exerciseName}`,
+  //       url: `https://exercisedb.p.rapidapi.com/exercises/equipment/${exerciseName}`,
   //       headers: {
   //         'content-type': 'application/octet-stream',
   //         'X-RapidAPI-Key': '6dd8960324mshd96e07e4e75a71ap11c919jsnb14d66383537',
@@ -81,7 +87,7 @@ const ThirdSection = ({exerciseName }: any) => {
   // }, [exerciseName])
   useEffect(() => {
     setisCounted(false)
-  } , [exerciseName])
+  } , [EXERCISENAME])
   const recordsNum = 6;
   const [selectedNum, setselectedNum] = useState(recordsNum)
   const paginationWidth = Math.ceil(ArrayLength / recordsNum)
@@ -90,12 +96,12 @@ const ThirdSection = ({exerciseName }: any) => {
     let selected = data.selected;
     setselectedNum((selected + 1)*recordsNum);
   };
-  const sendData = async () => {
+  // const sendData = async () => {
 
-    await setDoc(doc(db, "List by body part",exerciseName ), {
-      firstArray: bodyPart,
-    });  
-    }
+  //   await setDoc(doc(db, "List by body part", EXERCISENAME.toString() ), {
+  //     firstArray: bodyPart,
+  //   });  
+  //   }
     if(error) return <h1>error</h1>
     if(loading) return <h1>loading</h1>
     if(value) {
@@ -111,8 +117,11 @@ const ThirdSection = ({exerciseName }: any) => {
             <ExercisesContainer>
               {value && value?.data()?.firstArray?.slice(selectedNum-recordsNum,selectedNum).map((item: any, index: number) => {
                 return (
-                  <ExerciseCard key={index} onClick={() => {
-                    dispatch(SelectedExercise(item));
+                  <ExerciseCard key={index} onClick={async() => {
+                    // dispatch(SelectedExercise(item));
+                    await setDoc(doc(db, "ITEM", "res"), {
+                      SELECTEDITEM: item,
+                    });  
                   }}>
                   <Link href={'/' + item?.id}>
                       <Image    
@@ -133,12 +142,7 @@ const ThirdSection = ({exerciseName }: any) => {
               })}
               
                 </ExercisesContainer>
-            <button className="bg-red-500 m-10"
-            onClick={() => {
-              sendData();
-              console.log("doneeeeeeeeeeeeeee");
-            }}
-            >Send Data</button>
+          
           </div>
           <ReactPaginate
               className='py-7 flex justify-center items-center gap-3'
