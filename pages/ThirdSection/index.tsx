@@ -12,6 +12,7 @@ import { useDocument } from 'react-firebase-hooks/firestore';
 import {SelectedExercise} from "../features/selectedExercise"
 import {EXERCISENAME} from "../features/exerciseName"
 import { useDispatch, useSelector } from 'react-redux';
+import Loading from '@/pages/Loading';
 export const ExercisesContainer = styled.div`
   width: 100%;
   display: flex;
@@ -44,6 +45,7 @@ background-color: #ee8989;
   margin: 4px 2px;
   cursor: pointer;
   border-radius: 16px;
+  font-weight: 500;
 `
 export const ExerciseName = styled.button`
   background-color: #f3d657;
@@ -55,36 +57,23 @@ export const ExerciseName = styled.button`
   display: inline-block;
   margin: 4px 2px;
   border-radius: 16px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden; 
+  flex:1;
+  margin-right: 10px ;
+  height: 2.2em;
+  font-weight: bold;
+
 `
 const ThirdSection = () => {
 
   const Item = useSelector((state:any) => state.exercisename.value)
   const Item2 = useSelector((state:any) => state.exercise.value)
-  // const SelectedExercise = useSelector((state:any) => state.exercise.value)
   const [value, loading, error] = useDocument(doc(db, "List by body part", Item));
   const [ArrayLength, setArrayLength] = useState(1)
   const [isCounted, setisCounted] = useState(false)
-  const dispatch = useDispatch();
   const router = useRouter();
-  const uId = router.query;
-  const [bodyPart, setbodyPart] = useState([])
-  console.log("this is Item value" ,Item2);
-  // useEffect(() => {
-  //   const renderingExercises = async() => {
-  //     const options2 = {
-  //       method: 'GET',
-  //       url: `https://exercisedb.p.rapidapi.com/exercises/equipment/${exerciseName}`,
-  //       headers: {
-  //         'content-type': 'application/octet-stream',
-  //         'X-RapidAPI-Key': '6dd8960324mshd96e07e4e75a71ap11c919jsnb14d66383537',
-  //         'X-RapidAPI-Host': 'exercisedb.p.rapidapi.com'
-  //       }
-  //     };
-  //     const res = await axios.request(options2);
-  //     setbodyPart(res.data);
-  //   }
-  //   renderingExercises()
-  // }, [exerciseName])
   useEffect(() => {
     setisCounted(false)
   } , [EXERCISENAME])
@@ -96,16 +85,11 @@ const ThirdSection = () => {
     let selected = data.selected;
     setselectedNum((selected + 1)*recordsNum);
   };
-  // const sendData = async () => {
-
-  //   await setDoc(doc(db, "List by body part", EXERCISENAME.toString() ), {
-  //     firstArray: bodyPart,
-  //   });  
-  //   }
-    if(error) return <h1>error</h1>
-    if(loading) return <h1>loading</h1>
+    if(error) console.log(error); 
+    if(loading){
+      return <Loading/>
+    }
     if(value) {
-      console.log(value?.data()?.firstArray?.length)
       if(!isCounted){
         setArrayLength(value?.data()?.firstArray?.length)
         setisCounted(true)
@@ -113,7 +97,7 @@ const ThirdSection = () => {
     }
       return (
         <div>
-          <div>
+          <div className='mobile:mt-20'>
             <ExercisesContainer>
               {value && value?.data()?.firstArray?.slice(selectedNum-recordsNum,selectedNum).map((item: any, index: number) => {
                 return (

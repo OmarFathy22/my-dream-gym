@@ -4,14 +4,13 @@ import { Navigation, Pagination, A11y } from 'swiper'
 
 type Props = {}
 
-const SWIPER = ({SlideRef , children}:any) => {
+const SWIPER2 = ({SlideRef , children}:any) => {
   return (
     <Swiper
-    className=''
+     className='!h-[250px] 200screen:!w-[300px] 600screen:!w-[700px] 910screen:!w-[110px] 1000screen:!w-[1100px] 1300screen:!w-full '
     breakpoints={{
-     // when window width is >= 640px
      200: {
-       width: 200 ,
+       width: 200,
        slidesPerView: 1,
        slidesPerGroup:1,
 
@@ -29,15 +28,10 @@ const SWIPER = ({SlideRef , children}:any) => {
        slidesPerGroup:3,
 
      },
-     1000: {
-       width: 1000,
-       slidesPerView: 3,
-       slidesPerGroup:3,
-     },
      1300: {
        width: 1300,
-       slidesPerView: 3,
-       slidesPerGroup:3,
+       slidesPerView: 4,
+       slidesPerGroup:4,
 
      },
    }}
@@ -54,4 +48,4 @@ const SWIPER = ({SlideRef , children}:any) => {
   )
 }
 
-export default SWIPER
+export default SWIPER2;

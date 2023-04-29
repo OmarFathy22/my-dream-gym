@@ -1,42 +1,23 @@
-import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import bodyPartlogo from "../../public/assets/icons/body-part.png";
 import equipmentlogo from "../../public/assets/icons/equipment.png";
 import targetlogo from "../../public/assets/icons/target.png";
-import Header from "../Header";
-import axios from "axios";
 import styled from "styled-components";
-import {
-  ExerciseName,
-  ExercisesContainer,
-  Target,
-} from "../../pages/ThirdSection/index";
-import { ExerciseCard } from "../../pages/ThirdSection/index";
-import { Swiper, SwiperSlide, useSwiper } from "swiper/react";
-
-import SWIPER from "../SWIPER";
-import Link from "next/link";
-
-import { useSelector } from "react-redux";
 import SimilarbyTarget from "./SimilarbyTarget";
 import SimilarByEquipment from "./SimilarByEquipment";
 import { useDocument } from "react-firebase-hooks/firestore";
 import { doc } from "firebase/firestore";
 import { db } from "@/firebase";
-const MoveSlider = styled.div`
-  width: 80%;
-  display: flex;
-  justify-content: flex-start;
-  flex-direction: row-reverse;
-  gap: 50px;
-`;
-type Props = {};
+import SimilarYoutube from "./SimilarYoutube";
+import Footer from "../Footer";
+import Loading from "@/pages/Loading";
 const Section = styled.section`
+  width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: start;
-  height: 95vh;
+  align-items: center;
+  height: fit-content;
   flex: 1;
   gap: 30px;
 `;
@@ -47,85 +28,64 @@ const ParentSection = styled.section`
   align-items: center;
   justify-content: center;
 `;
+const ParentSectionMobile = styled.section`
+display: flex;
+padding-top: 15px;
+align-items: center;
+justify-content: center;
+`;
+const arrayData = [bodyPartlogo , equipmentlogo , targetlogo]
 const Details = ({ uId }: any) => {
   const [value, loading, error] = useDocument(doc(db, "ITEM", 'res'));
-  const [stillLoading, setstillLoading] = useState<any>('');
-  const [SimilarExercises, setSimilarExercises] = useState<any>([]);
-  const [SimilarEquipments, setSimilarEquipments] = useState<any>([]);
-  const [RelatedVideos, setRelatedVideos] = useState<any>([]);
-  const recordsNum = 6;
-  const [selectedNum, setselectedNum] = useState(recordsNum);
-  const paginationWidth = Math.ceil(SimilarExercises.length / recordsNum);
-  const pageCount = paginationWidth;
-  const handlePageClick = (data: any) => {
-    let selected = data.selected;
-    setselectedNum((selected + 1) * recordsNum);
-  };
-
-  const SliderRef2: any = useRef();
-  console.log('iteeeeeeeeeeeeeeeeem');
-  if(error)console.log(error);
-  if(loading)console.log(loading);
-  if(value)console.log("doneeeeeeeee");
+  if (error) console.log(error);
+  if(loading){
+    return <Loading/>
+  }
   return (
     <div>
-      <div className="pt-4">
-        <Header />
-      </div>
-        <ParentSection>
+      {value?.data() && <div className="pt-4">
+    </div>}
+      <ParentSection>
         <main className="flex items-center">
-          <Section>
+          <Section >
+            <h1 className="text-[40px] font-bold  ">{value?.data()?.SELECTEDITEM.name}</h1>
             {value?.data()?.SELECTEDITEM.gifUrl && (
               <Image
-                loading="lazy"
-                className="h-[80%]"
-                width={500}
+                priority={true}
+                className="max-h-[500px] w-[800px]"
+                width={550}
                 height={500}
                 src={value.data()?.SELECTEDITEM.gifUrl}
                 alt="image"
               />
             )}
-          </Section>
-          <Section>
-            <h1 className="text-[40px] font-bold  ">{value?.data()?.SELECTEDITEM.name}</h1>
             <p>
               Exercieses Keep you strong. {value?.data()?.SELECTEDITEM.name} is one of the best.
               exercieses to target your {value?.data()?.SELECTEDITEM.target}.It will help you improve
               your mood and gain energy
             </p>
-            <article className="flex flex-col gap-[30px] w-full">
-              <div className="flex gap-3 items-center">
+            <article className="flex  gap-[30px] w-full">
+              {arrayData.map((item:any , index:number) => {
+                return(
+                  <div key={index} className="flex w-full flex-col justify-center gap-3 items-center">
                 <div className="bg-yellow-100 rounded-full p-5">
-                  <Image width={40} height={40} src={bodyPartlogo} alt="icon" />
+                  <Image width={40} height={40} src={item} alt="icon" />
                 </div>
-                <h4 className="font-semibold">{value?.data()?.SELECTEDITEM.bodyPart}</h4>
+                <h4 className="font-semibold">{
+                 index === 0 ? value?.data()?.SELECTEDITEM?.bodyPart : index === 1 ? value?.data()?.SELECTEDITEM?.equipment : value?.data()?.SELECTEDITEM?.target
+                }</h4>
               </div>
-              <div className="flex gap-3 items-center">
-                <div className="bg-yellow-100 rounded-full p-5">
-                  <Image width={40} height={40} src={targetlogo} alt="icon" />
-                </div>
-                <h4 className="font-semibold">{value?.data()?.SELECTEDITEM.target} </h4>
-              </div>
-              <div className="flex gap-3 items-center">
-                <div className="bg-yellow-100 rounded-full p-5">
-                  <Image
-                    width={40}
-                    height={40}
-                    src={equipmentlogo}
-                    alt="icon"
-                  />
-                </div>
-                <h4 className="font-semibold">{value?.data()?.SELECTEDITEM.equipment} </h4>
-              </div>
+                )
+              })}
             </article>
           </Section>
         </main>
-       {value && <SimilarbyTarget target ={value?.data()?.SELECTEDITEM?.target}/>}
-       {value && <SimilarByEquipment equipment={value?.data()?.SELECTEDITEM?.equipment}/>}
+
+        {value && <SimilarbyTarget target={value?.data()?.SELECTEDITEM?.target} />}
+        {value && <SimilarByEquipment equipment={value?.data()?.SELECTEDITEM?.equipment} />}
+        {value && <SimilarYoutube NameOfExercise={value?.data()?.SELECTEDITEM?.name} />}
       </ParentSection>
-      <section className="flex gap-3 justify-center flex-wrap">
-          
-        </section>
+      <Footer />
     </div>
   );
 };

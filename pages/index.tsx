@@ -1,18 +1,26 @@
 'use client';
 import FirstSection from "@/components/FirstSection";
-import Footer from "@/components/Footer";
 import SecondSection from "./SecondSection/index";
-import axios from 'axios'
 import ThirdSection from "./ThirdSection";
+import Footer from "@/components/Footer";
 import { useState } from "react";
+import Loading from "./Loading";
 
-function Home({ bodyPart }: any) {   
+
+function Home() {   
+  const [loading, setloading] = useState(true)
+  setTimeout(() => {
+    setloading(false)
+  }, 1000);
+  if(loading){
+    return <Loading/>
+  }
   return (
-    <div>
+    <div className="overflow-hidden">
       <FirstSection />
       <SecondSection/> 
       <ThirdSection/>
-      {/* <Footer/> */}
+      <Footer/>
     </div>
   );
 }

@@ -5,6 +5,7 @@ import type { AppProps } from 'next/app'
 import selectedexercise from './features/selectedExercise'
 import exerciseName from './features/exerciseName';
 import { Provider } from 'react-redux';
+import Header from '@/components/Header';
 
   const store = configureStore({
     reducer:{
@@ -16,6 +17,7 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <Provider store = {store}>
       <div className='px-[5%] bg-red-50'>
+         <Header/>
         <Component {...pageProps} />
         {/* <Footer/> */}
       </div>
