@@ -1,29 +1,25 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useRef } from "react";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/scrollbar";
-import Image from 'next/image'
-import Link from 'next/link'
-import styled from 'styled-components'
-import { Swiper, SwiperSlide, useSwiper } from 'swiper/react'
-import 'swiper/css'
-import 'swiper/css/navigation'
-import GymIcon from "../../public/assets/icons/gym.png";
-import forwardIcon from "../../public/assets/icons/right-arrow.png";
-import backwardIcon from "../../public/assets/icons/left-arrow.png";
-import SWIPER from '@/components/SWIPER';
-import { doc, setDoc } from 'firebase/firestore';
-import { db } from '@/firebase';
-import {useDocument } from "react-firebase-hooks/firestore";
-import axios from 'axios';
-import { useDispatch, useSelector } from 'react-redux';
-import { ExerciseName, Target } from '@/pages/ThirdSection';
-import { ExercisesContainer } from '@/pages/ThirdSection';
-type Props = {}
+import Image from "next/image";
+import Link from "next/link";
+import styled from "styled-components";
+import { SwiperSlide } from "swiper/react";
+import "swiper/css";
+import "swiper/css/navigation";
+import { doc, setDoc } from "firebase/firestore";
+import { db } from "@/firebase";
+import { useDocument } from "react-firebase-hooks/firestore";
+import { ExerciseName, Target } from "@/pages/ThirdSection";
+import { ExercisesContainer } from "@/pages/ThirdSection";
+import "swiper/swiper-bundle.min.css";
+import ForSwiper from "../../pages/ForSwiper";
+import Loading from "@/pages/Loading";
+
 const Main = styled.div`
-  margin-top: 30px;
-  height: 105vh;
+  margin-top: 100px;
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -38,104 +34,89 @@ export const ExerciseCard = styled.div`
   align-items: center;
   gap: 30px;
   cursor: pointer;
-  height: 420px;
+  height: 420px !important;
   width: 320px;
   border-radius: 3px;
   background-color: white;
-  border-top: 2px solid red;;
+  border-top: 2px solid red;
   border-radius: 3px;
-  scale: 0.9;
-  transition: all 0.5s;
-  &:hover{
-    scale: 1;
-  }
 `;
 export const ExercisesName = styled.h1`
   font: 20px;
   font-weight: 700;
 `;
-const MoveSlider = styled.div`
-  width: 80%;
-  display: flex;
-  justify-content: flex-start;
-  flex-direction: row-reverse;
-  gap: 50px;
-  position: absolute;
-  right: 50%;
-  bottom: 0;
-  z-index: 100000;
-`;
 
-const SecondSection = ({target}:any) => {
-  const [value, loading, error] = useDocument(doc(db, "List by target muscle", target));
+const SecondSection = ({ target }: any) => {
+  const [value, loading, error] = useDocument(
+    doc(db, "List by target muscle", target)
+  );
 
   const SlideRef: any = useRef();
-  const handleNext = () => {
-    SlideRef.current.swiper.slideNext();
-  };
-
-  const handlePrev = () => {
-    SlideRef.current.swiper.slidePrev();
-  };
-
-  if(error) return <h1>error</h1>
-  if(loading) return <h1>loading</h1>
-  console.log(target);
+  if (error) return <h1>error</h1>;
+  if(loading){
+    return <Loading/>
+  }
   return (
     <Main>
-      <h1 className="text-[30px] text-left w-full   pl-[40px] font-bold">Similar <span className="text-red-500">Target Muscle</span> Exerscises</h1>  
-    <ExercisesContainer >
-    <SWIPER SlideRef = {SlideRef} >
-    {value?.data()?.Array?.map((item: any, index: number) => {
-              return (
-                <SwiperSlide key={index} className="mb-[60px]">
-                  <ExerciseCard>
-                    <Link  href={"/" + item?.id}>
-                      <Image
-                        loading="lazy"
-                        // priority={true}
-                        height={300}
-                        width={300}
-                        src={item?.gifUrl}
-                        alt={"icon"}
-                      />
-                      <div className="flex  gap-2">
-                        <Target>{item?.target}</Target>
-                        <ExerciseName>{item?.bodyPart}</ExerciseName>
-                      </div>
-                      <h1 className="font-bold p-2 ">{item?.name}</h1>
-                    </Link>
-                  </ExerciseCard>
+      <h1 className="mobile:text-[24px] tablet:text-[30px] text-center w-full  font-bold">
+        Similar <span className="text-red-500">Target Muscle</span> Exerscises
+      </h1>
+      <ExercisesContainer>
+        <ForSwiper SlideRef={SlideRef}>
+          {value?.data()?.Array?.map((item: any, index: number) => {
+            return (
+              <ExerciseCard
+              key={item.id}
+                className=" !rounded-lg"
+                onClick={async () => {
+                  await setDoc(doc(db, "ITEM", "res"), {
+                    SELECTEDITEM: item,
+                  });
+
+                  // window.scrollTo({top:0 ,behavior:"smooth"})b
+                }}
+              >
+                <SwiperSlide
+                  key={index}
+                  onClick={async () => {
+                    await setDoc(doc(db, "ITEM", "res"), {
+                      SELECTEDITEM: item,
+                    });
+                  }}
+                  
+                  className="
+                  
+                  !h-[100%] !w-full !flex !justify-center mb-10"
+                >
+                  <Link
+                    className="!rounded-lg !h-full !w-full bg-white"
+                    href={"/" + item?.id}
+                  >
+                    <Image
+                      // loading="lazy"
+                      className="!w-[350px] !h-[80%] !rounded-[30px]"
+                      priority={true}
+                      height={100}
+                      width={100}
+                      src={item?.gifUrl}
+                      alt={"icon"}
+                    />
+                    <div className="flex pl-5 pr-3 gap-2">
+                      <Target>{item?.target}</Target>
+                      <ExerciseName>{item?.bodyPart}</ExerciseName>
+                    </div>
+                    <h1 className="font-bold p-2 pt-4 text-center ">
+                      {item?.name}
+                    </h1>
+                  </Link>
                 </SwiperSlide>
-              );
-            })}
-        </SWIPER>
-      <MoveSlider>
-        <Image
-         className="cursor-pointer "
-          onClick={handleNext}
-          height={30}
-          width={30}
-          src={forwardIcon}
-          alt="icon"
-        />
-      <Image
-       className="cursor-pointer"
-        onClick={handlePrev}
-        height={30}
-        width={30}
-        src={backwardIcon}
-        alt="icon"
-      />
-    </MoveSlider>
-      
-      
-    </ExercisesContainer>
-  
-  </Main>
-    )
-}
+              </ExerciseCard>
+            );
+          })}
+        </ForSwiper>
+      </ExercisesContainer>
+    </Main>
+  );
+};
 
-
-
-export default SecondSection
+export default SecondSection;
