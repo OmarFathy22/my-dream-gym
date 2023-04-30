@@ -5,11 +5,10 @@ import styled from 'styled-components'
 import Head from 'next/head'
 
 
-type Props = {}
 const GymName = styled.h1`
     
  `
-const Footer = (props: Props) => {
+const Footer = () => {
   return (
     <div>
       <Head>

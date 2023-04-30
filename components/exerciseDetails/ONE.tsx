@@ -11,6 +11,7 @@ import { db } from "@/firebase";
 import SimilarYoutube from "./SimilarYoutube";
 import Footer from "../Footer";
 import Loading from "@/pages/Loading";
+import { useEffect, useState } from "react";
 const Section = styled.section`
   width: 100%;
   display: flex;
@@ -36,9 +37,16 @@ justify-content: center;
 `;
 const arrayData = [bodyPartlogo , equipmentlogo , targetlogo]
 const Details = ({ uId }: any) => {
+  const [Loader, setLoader] = useState(true)
+  useEffect(() => {
+    setTimeout(() => {
+     setLoader(false)
+    }, 1000);
+    console.log('Route changed:', uId);
+  }, [uId]);
   const [value, loading, error] = useDocument(doc(db, "ITEM", 'res'));
   if (error) console.log(error);
-  if(loading){
+  if(loading || Loader){
     return <Loading/>
   }
   return (

@@ -5,9 +5,8 @@ import Link from 'next/link'
 import { useRouter } from 'next/router';
 
 
-type Props = {}
 
-function Header({ }: Props) { 
+function Header() { 
   const router = useRouter();
 
   return (

@@ -60,6 +60,7 @@ const SecondSection = ({ equipment }: any) => {
   let Id = new Date().getTime();
   if (error) return <h1>error</h1>;
   if(loading){
+    console.log("loading.....");
     return <Loading/>
   }
   return (

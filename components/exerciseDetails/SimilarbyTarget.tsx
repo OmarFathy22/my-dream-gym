@@ -72,8 +72,6 @@ const SecondSection = ({ target }: any) => {
                   await setDoc(doc(db, "ITEM", "res"), {
                     SELECTEDITEM: item,
                   });
-
-                  // window.scrollTo({top:0 ,behavior:"smooth"})b
                 }}
               >
                 <SwiperSlide

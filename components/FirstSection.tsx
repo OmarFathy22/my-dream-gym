@@ -2,9 +2,8 @@ import React from 'react'
 import Image from 'next/image'
 import logo from '../public/assets/images/0_Mohamed-Salah-Liverpool-removebg.png'
 
-type Props = {}
 
-const FirstSection = (props: Props) => {
+const FirstSection = () => {
   return (
     <main className="flex items-center ">
         <section className="  flex flex-1 justify-center flex-col h-[99.9vh]">

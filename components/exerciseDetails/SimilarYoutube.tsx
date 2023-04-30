@@ -6,22 +6,13 @@ import "swiper/css/scrollbar";
 import Image from "next/image";
 import Link from "next/link";
 import styled from "styled-components";
-import { Swiper, SwiperSlide, useSwiper } from "swiper/react";
+import { SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
-import GymIcon from "../../public/assets/icons/gym.png";
-import forwardIcon from "../../public/assets/icons/right-arrow.png";
-import backwardIcon from "../../public/assets/icons/left-arrow.png";
-import SWIPER from "@/components/SWIPER";
-import { doc, setDoc } from "firebase/firestore";
-import { db } from "@/firebase";
-import { useDocument } from "react-firebase-hooks/firestore";
 import axios from "axios";
-import { useDispatch, useSelector } from "react-redux";
-import { ExerciseName, Target } from "@/pages/ThirdSection";
+import { ExerciseName } from "@/pages/ThirdSection";
 import { ExercisesContainer } from "@/pages/ThirdSection";
 import "swiper/swiper-bundle.min.css";
-import Move from "../MoveSlider";
 import ForSwiper from "@/pages/ForSwiper";
 import Loading from "@/pages/Loading";
 
@@ -29,7 +20,6 @@ type Props = {};
 
 const Main = styled.div`
   margin-top: 100px;
-  /* height: 105vh; */
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -69,7 +59,7 @@ const SecondSection = ({ NameOfExercise }: any) => {
         method: "GET",
         url: "https://simple-youtube-search.p.rapidapi.com/search",
         params: {
-          query: NameOfExercise,
+          query: NameOfExercise + " exercise",
           safesearch: "false",
         },
         headers: {
@@ -83,21 +73,16 @@ const SecondSection = ({ NameOfExercise }: any) => {
       try {
         const response = await axios.request(options);
         setYoutube(response.data.results);
-        setloading(false)
+        setTimeout(() => {
+          setloading(false)
+        }, 2000);
       } catch (error) {
         console.error(error);
       }
     };
     func();
-  }, []);
+  }, [NameOfExercise]);
   const SlideRef: any = useRef();
-  const handleNext = () => {
-    SlideRef.current.swiper.slideNext();
-  };
-
-  const handlePrev = () => {
-    SlideRef.current.swiper.slidePrev();
-  };
   if(loading){
     return <Loading/>
   }
