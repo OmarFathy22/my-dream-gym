@@ -1,16 +1,14 @@
 import React from 'react'
 import Image from 'next/image'
-import Header from '@/components/Header'
-import logo from '../public/assets/images/banner.png'
+import logo from '../public/assets/images/0_Mohamed-Salah-Liverpool-removebg.png'
 
 type Props = {}
 
 const FirstSection = (props: Props) => {
   return (
     <main className="flex items-center ">
-        <section className="flex flex-1  justify-center flex-col  h-[99.9vh]">
-          <Header />
-          <div className="relative h-[90%] flex flex-col gap-6 justify-center">
+        <section className="  flex flex-1 justify-center flex-col h-[99.9vh]">
+          <div className="relative mobile:items-center mobile:justify-start desktop:h-[90%] flex flex-col gap-6 justify-center">
             <h3 className="text-red-500 text-2xl font-medium">Fintness Club</h3>
             <h1 className="text-[45px] font-bold">
               Sweat, Smile <br /> And Repeat
@@ -22,11 +20,11 @@ const FirstSection = (props: Props) => {
               Explore Exercises
             </button>
           </div>
-          <h1 className=" absolute bottom-[-80px] left-12  text-[100px] text-red-100 ">
+          <h1 className=" mobile:text-[100px] mobile:text-center mobile:static tablet:text-[140px] absolute bottom-[-120px] left-12  laptop:text-[220px] text-red-100 ">
             Exercise
           </h1>
         </section>
-        <section className="flex-1">
+        <section className="laptop:flex laptop:absolute laptop:top-[20px] laptop:right-[0px] hidden flex-2 ">
           <Image
             className="h-[100vh] w-[100%] relative z-10"
             quality={100}

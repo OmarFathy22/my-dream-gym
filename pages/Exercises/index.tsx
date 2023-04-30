@@ -1,11 +1,14 @@
+import ONE from '@/components/exerciseDetails/ONE'
 import React from 'react'
 
 type Props = {}
 
-function Exercises({}: Props) {
+const index = (props: Props) => {
   return (
-    <div>Exercises</div>
+    <div>
+      <ONE/>
+    </div>
   )
 }
 
-export default Exercises
+export default index
