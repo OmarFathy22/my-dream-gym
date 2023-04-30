@@ -10,7 +10,7 @@ import { db } from "@/firebase";
 import { useDocument } from "react-firebase-hooks/firestore";
 import { EffectCards } from "swiper";
 import "swiper/swiper-bundle.min.css";
-import { EXERCISENAME } from "./features/exerciseName";
+import { EXERCISENAME } from "../components/features/exerciseName";
 import { useDispatch } from "react-redux";
 
 const ForTesting = () => {

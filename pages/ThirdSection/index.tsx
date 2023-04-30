@@ -9,8 +9,8 @@ import Link from 'next/link';
 import { doc, setDoc } from "firebase/firestore"; 
 import {db} from '../../firebase'
 import { useDocument } from 'react-firebase-hooks/firestore';
-import {SelectedExercise} from "../features/selectedExercise"
-import {EXERCISENAME} from "../features/exerciseName"
+import {SelectedExercise} from "../../components/features/selectedExercise"
+import {EXERCISENAME} from "../../components/features/exerciseName"
 import { useDispatch, useSelector } from 'react-redux';
 import Loading from '@/pages/Loading';
 export const ExercisesContainer = styled.div`
