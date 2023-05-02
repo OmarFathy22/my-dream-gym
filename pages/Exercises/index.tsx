@@ -1,5 +1,10 @@
-import ONE from '@/components/exerciseDetails/ONE'
 import React from 'react'
+import dynamic from 'next/dynamic';
+const ONE = dynamic(() => import("@/components/exerciseDetails/ONE"), {
+  ssr: false,
+  suspense: true,
+});
+
 
 type Props = {}
 

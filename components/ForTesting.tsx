@@ -32,8 +32,8 @@ const ForTesting = () => {
             <SwiperSlide
               onClick={() => {
                 setTimeout(() => {
-                  window.scrollTo({ top: 1600, behavior: "smooth" });
-                }, 1000);
+                  window.scrollTo({ top: 1700, behavior: "smooth" });
+                }, 200);
                 dispatch(EXERCISENAME(exercise));
               }}
               className="swiper-slide-1 !flex !justify-center !items-center"

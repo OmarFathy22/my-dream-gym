@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "export":"next build && next export",
+    "export": "next export",
     "start": "next start",
     "lint": "next lint"
   },
@@ -21,12 +21,14 @@
     "eslint-config-next": "13.3.0",
     "firebase": "^9.21.0",
     "next": "13.3.0",
+    "next-optimized-images": "^2.6.2",
     "postcss": "8.4.22",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-firebase-hooks": "^5.1.1",
     "react-paginate": "^8.2.0",
     "react-redux": "^8.0.5",
+    "sharp": "^0.32.1",
     "styled-components": "^5.3.9",
     "swiper": "^9.2.3",
     "tailwindcss": "3.3.1",

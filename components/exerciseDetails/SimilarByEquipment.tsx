@@ -12,11 +12,17 @@ import "swiper/css/navigation";
 import { doc, setDoc } from "firebase/firestore";
 import { db } from "@/firebase";
 import { useDocument } from "react-firebase-hooks/firestore";
-import { ExerciseName, Target } from "@/pages/ThirdSection";
-import { ExercisesContainer } from "@/pages/ThirdSection";
+import { ExerciseCard, ExerciseName, Target } from "@/components/ThirdSection";
+import { ExercisesContainer } from "@/components/ThirdSection";
 import "swiper/swiper-bundle.min.css";
-import ForSwiper from "@/pages/ForSwiper";
-import Loading from "@/pages/Loading";
+import Loading from "@/components/Loading";
+const ForSwiper = dynamic(() => import("@/components/ForSwiper"), {
+  ssr: false,
+  loading: () => <Loading />,
+  suspense: true,
+});
+
+import dynamic from "next/dynamic";
 
 type Props = {};
 const Main = styled.div`
@@ -28,31 +34,7 @@ const Main = styled.div`
   gap: 40px;
 `;
 
-export const ExerciseCard = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 30px;
-  cursor: pointer;
-  height: 420px;
-  width: 320px;
-  border-radius: 3px;
-  background-color: white;
-  border-top: 2px solid red;
-  border-radius: 3px;
-  scale: 0.9;
-  transition: all 0.5s;
-  &:hover {
-    scale: 1;
-  }
-`;
-export const ExercisesName = styled.h1`
-  font: 20px;
-  font-weight: 700;
-`;
-
-const SecondSection = ({ equipment }: any) => {
+const SecondSection = ({ equipment  }: any) => {
   const [value, loading, error] = useDocument(
     doc(db, "List by equipment", equipment)
   );
@@ -60,16 +42,16 @@ const SecondSection = ({ equipment }: any) => {
   let Id = new Date().getTime();
   if (error) return <h1>error</h1>;
   if(loading){
-    console.log("loading.....");
     return <Loading/>
   }
+  
   return (
-    <Main>
+    <Main style={{  animation: "animate 1s 1" , transition: "all 1s ease-in-out"}}>
       <h1 className="mobile:text-[24px] tablet:text-[30px] text-center w-full  font-bold">
         Similar <span className="text-red-500">Equipment</span> Exerscises
       </h1>
       <ExercisesContainer>
-        <ForSwiper SlideRef={SlideRef}>
+        {value?.data() &&<ForSwiper SlideRef={SlideRef}>
           {value?.data()?.Array?.map((item: any, index: number) => {
             return (
               <ExerciseCard
@@ -109,7 +91,7 @@ const SecondSection = ({ equipment }: any) => {
                       <Target>{item?.target}</Target>
                       <ExerciseName>{item?.bodyPart}</ExerciseName>
                     </div>
-                    <h1 className="font-bold p-2 pt-4 text-center ">
+                    <h1 className="font-bold p-2 pt-4 text-center truncate ">
                       {item?.name}
                     </h1>
                   </Link>
@@ -117,7 +99,8 @@ const SecondSection = ({ equipment }: any) => {
               </ExerciseCard>
             );
           })}
-        </ForSwiper>
+        </ForSwiper>}
+        {!value?.data() && <h1 className='text-2xl text-center mb-10 font-bold'>No Exercises loaded <br/>Please refresh The Page </h1>}
       </ExercisesContainer>
     </Main>
   );

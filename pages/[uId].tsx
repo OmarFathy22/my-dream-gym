@@ -1,15 +1,20 @@
 import { useRouter } from 'next/router';
-import React, { useEffect } from 'react'
-import ONE from '../components/exerciseDetails/ONE'
+import React, { useEffect, useRef } from 'react'
+import dynamic from 'next/dynamic';
+const ONE = dynamic(() => import("../components/exerciseDetails/ONE"), {
+  ssr: false,
+  suspense: true,
+});
 
-type Props = {}
-
-const Post = (props: Props) => {
+const Post = (e:any) => {
+  const elementRef:any = useRef();
+  useEffect(() => elementRef.current.scrollIntoView());
   const router = useRouter();
   const {uId} = router.query;
   return (
-    <div>
+    <div ref={elementRef}>
      <ONE uId = {uId}/>
+
     </div>
   )
 }

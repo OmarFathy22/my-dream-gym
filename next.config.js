@@ -6,8 +6,8 @@ const nextConfig = {
     ignoreDuringBuilds: true,
   },
   images: {
-   domains:['d205bpvrqc9yn1.cloudfront.net' , 'i.ytimg.com',"yt3.ggpht.com"]
-    
+   domains:['d205bpvrqc9yn1.cloudfront.net' , 'i.ytimg.com',"yt3.ggpht.com"],    
+   unoptimized:true
   },
   compiler: {
     // Enables the styled-components SWC transform

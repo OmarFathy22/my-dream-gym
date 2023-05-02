@@ -1,20 +1,24 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, {useLayoutEffect, useRef } from "react";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/scrollbar";
-import Image from "next/image";
-import Link from "next/link";
 import styled from "styled-components";
 import { SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
 import axios from "axios";
-import { ExerciseName } from "@/pages/ThirdSection";
-import { ExercisesContainer } from "@/pages/ThirdSection";
+import { ExerciseCard } from "@/components/ThirdSection";
+import { ExercisesContainer } from "@/components/ThirdSection";
 import "swiper/swiper-bundle.min.css";
-import ForSwiper from "@/pages/ForSwiper";
-import Loading from "@/pages/Loading";
+import dynamic from "next/dynamic";
+import Loading from "@/components/Loading";
+const ForSwiper = dynamic(() => import("@/components/ForSwiper"), {
+  ssr: false,
+  loading: () => <Loading />,
+  suspense: true,
+});
+
 
 type Props = {};
 
@@ -27,33 +31,13 @@ const Main = styled.div`
   gap: 40px;
 `;
 
-export const ExerciseCard = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 30px;
-  cursor: pointer;
-  height: 420px;
-  width: 320px;
-  border-radius: 3px;
-  background-color: white;
-  border-radius: 3px;
-  scale: 0.9;
-  transition: all 0.5s;
-  &:hover {
-    scale: 1;
-  }
-`;
-export const ExercisesName = styled.h1`
-  font: 20px;
-  font-weight: 700;
-`;
 
-const SecondSection = ({ NameOfExercise }: any) => {
-  const [Youtube, setYoutube] = useState([]);
-  const [loading, setloading] = useState(true)
-  useEffect(() => {
+
+
+const SecondSection = ({ NameOfExercise  }: any) => {
+  useLayoutEffect(() => {
+    localStorage.setItem("Youtube", JSON.stringify([]));
+    localStorage.setItem("loading", "false");
     const func = async () => {
       const options = {
         method: "GET",
@@ -72,10 +56,8 @@ const SecondSection = ({ NameOfExercise }: any) => {
 
       try {
         const response = await axios.request(options);
-        setYoutube(response.data.results);
-        setTimeout(() => {
-          setloading(false)
-        }, 2000);
+        localStorage.setItem("Youtube", JSON.stringify(response.data.results));
+        localStorage.setItem("loading", "false");
       } catch (error) {
         console.error(error);
       }
@@ -83,64 +65,38 @@ const SecondSection = ({ NameOfExercise }: any) => {
     func();
   }, [NameOfExercise]);
   const SlideRef: any = useRef();
+  const loading = localStorage.getItem("loading") === "true";
+  const Youtube = JSON.parse(localStorage.getItem("Youtube") || "[]");
   if(loading){
     return <Loading/>
   }
   return (
-    <Main>
-      <h1 className="text-[30px] pl-[40px] text-left w-full  font-bold">
+    <Main style={{  animation: "animate 1s 1" , transition: "all 1s ease-in-out"}} >
+  
+      <h1 className="mobile:text-[24px] tablet:text-[30px] text-center w-full font-bold">
         Similar <span className="text-red-500">Youtube </span> Videos
       </h1>
       <ExercisesContainer>
-        <ForSwiper SlideRef={SlideRef}>
+        {Youtube.length > 1 && <ForSwiper SlideRef={SlideRef}>
           {Youtube.map((item: any, index: number) => {
             return (
               <ExerciseCard key={index} className="!rounded-lg">
                 <SwiperSlide
                  key={index}
-                  className="!h-[100%] !w-full !flex !justify-center mb-10"
+                  className="!h-[100%] !w-full !flex !justify-center mb-10 flex-col "
                 >
-                  <Link
-                    href={item.url}
-                    target="_blank"
-                    className="!rounded-lg !h-full !w-full bg-white"
+                  <div className="!rounded-lg !h-[300px] !w-full bg-white"
                   >
-                    <Image
-                      // loading="lazy"
-                      className="!w-[100%] !object-cover !h-[300px] !rounded-lg"
-                      priority={true}
-                      width="0"
-                      height="0"
-                      sizes="100vw"
-                      src={item?.thumbnail?.url}
-                      alt={"icon"}
-                    
-                      
-                    />
-                    <div className="flex mt-5 items-center ml-3  mx-h-[10px] gap-2">
-                      <div>
-                        <Image
-                          className="rounded-full w-[50px] h-[50px]"
-                          priority={true}
-                          height={30}
-                          width={50}
-                          src={item?.channel.icon}
-                          alt="icon"
-                        />
-                      </div>
-                      <ExerciseName className="!bg-gray-900">
-                        {item?.channel.name}
-                      </ExerciseName>
-                    </div>
-                    <h1 className="font-bold p-2 ml-3 mt-3 text-center text-ellipsis overflow-hidden ">
-                      {item?.title}
-                    </h1>
-                  </Link>
+                  {/* <iframe allowFullScreen className="!w-[100%]  !h-[300px] !rounded-lg block" width="420" height="345" src="https://embed.lottiefiles.com/animation/142649">\ */}
+                    <iframe allowFullScreen className="!w-[100%]  !h-[300px] !rounded-lg block" width="420" height="345" src={"https://www.youtube.com/embed/" + item.id}></iframe>
+                  {/* </iframe> */}
+                  </div>
                 </SwiperSlide>
               </ExerciseCard>
             );
           })}
-        </ForSwiper>
+        </ForSwiper>}
+        {Youtube.length < 1 && <h1 className='text-2xl text-center mb-10 font-bold'>No Exercises loaded <br/>Please refresh The Page </h1>}
       </ExercisesContainer>
     </Main>
   );

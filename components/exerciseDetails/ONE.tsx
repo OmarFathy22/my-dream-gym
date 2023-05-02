@@ -3,15 +3,33 @@ import bodyPartlogo from "../../public/assets/icons/body-part.png";
 import equipmentlogo from "../../public/assets/icons/equipment.png";
 import targetlogo from "../../public/assets/icons/target.png";
 import styled from "styled-components";
-import SimilarbyTarget from "./SimilarbyTarget";
-import SimilarByEquipment from "./SimilarByEquipment";
+import Loading from "@/components/Loading";
+
+const SimilarbyTarget = dynamic(() => import("./SimilarbyTarget"), {
+  ssr: false,
+  loading: () => <Loading />,
+  suspense: true,
+});
+const SimilarByEquipment = dynamic(() => import("./SimilarByEquipment"), {
+  ssr: false,
+  loading: () => <Loading />,
+  suspense: true,
+});
+const SimilarYoutube = dynamic(() => import("./SimilarYoutube"), {
+  ssr: false,
+  loading: () => <Loading />,
+  suspense: true,
+});
+const Footer = dynamic(() => import("../Footer"), {
+  ssr: false,
+  loading: () => <Loading />,
+  suspense: true,
+});
 import { useDocument } from "react-firebase-hooks/firestore";
 import { doc } from "firebase/firestore";
 import { db } from "@/firebase";
-import SimilarYoutube from "./SimilarYoutube";
-import Footer from "../Footer";
-import Loading from "@/pages/Loading";
-import { useEffect, useState } from "react";
+import dynamic from "next/dynamic";
+import { Suspense } from "react";
 const Section = styled.section`
   width: 100%;
   display: flex;
@@ -35,26 +53,25 @@ padding-top: 15px;
 align-items: center;
 justify-content: center;
 `;
+const Main = styled.main`
+  animation: animate 1s 1;
+  transition: all 1s ease-in-out;
+
+`
 const arrayData = [bodyPartlogo , equipmentlogo , targetlogo]
-const Details = ({ uId }: any) => {
-  const [Loader, setLoader] = useState(true)
-  useEffect(() => {
-    setTimeout(() => {
-     setLoader(false)
-    }, 1000);
-    console.log('Route changed:', uId);
-  }, [uId]);
+const Details = ({ uId }: any) => {  
   const [value, loading, error] = useDocument(doc(db, "ITEM", 'res'));
   if (error) console.log(error);
-  if(loading || Loader){
+  if(loading){
     return <Loading/>
   }
   return (
-    <div>
+  
+  <div>
       {value?.data() && <div className="pt-4">
     </div>}
       <ParentSection>
-        <main className="flex items-center">
+        <Main className="flex items-center">
           <Section >
             <h1 className="text-[40px] font-bold  ">{value?.data()?.SELECTEDITEM.name}</h1>
             {value?.data()?.SELECTEDITEM.gifUrl && (
@@ -87,11 +104,13 @@ const Details = ({ uId }: any) => {
               })}
             </article>
           </Section>
-        </main>
+        </Main>
 
-        {value && <SimilarbyTarget target={value?.data()?.SELECTEDITEM?.target} />}
-        {value && <SimilarByEquipment equipment={value?.data()?.SELECTEDITEM?.equipment} />}
-        {value && <SimilarYoutube NameOfExercise={value?.data()?.SELECTEDITEM?.name} />}
+        <Suspense fallback={<Loading />}>
+          {value && <SimilarbyTarget target={value?.data()?.SELECTEDITEM?.target}  />}
+          {value && <SimilarByEquipment equipment={value?.data()?.SELECTEDITEM?.equipment} />}
+          {value && <SimilarYoutube NameOfExercise={value?.data()?.SELECTEDITEM?.name} />}
+    </Suspense>
       </ParentSection>
       <Footer />
     </div>

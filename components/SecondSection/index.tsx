@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
@@ -10,11 +10,12 @@ import { doc } from "firebase/firestore";
 import { db } from "@/firebase";
 import { useDocument } from "react-firebase-hooks/firestore";
 import ForTesting from "../ForTesting";
-import Loading from "@/pages/Loading";
+import Loading from "@/components/Loading";
+import { useDispatch } from "react-redux";
+import { EXERCISENAME } from "@/components/features/exerciseName";
 type Props = {};
-const Main = styled.div`
+const Main = styled.main`
   margin: 200px 0 150px 0;
-  min-height: 100vh;
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -32,7 +33,7 @@ const Text = styled.h1`
   font-weight: 500;
   text-align: center;
 `;
-const SearchBox = styled.div`
+const SearchBox = styled.form`
   width: 100%;
   display: flex;
 `;
@@ -55,6 +56,7 @@ const SearchButton = styled.button`
 `;
 export const CardsBox = styled.div`
   width: 100%;
+  height: 500px;
   display: flex;
   gap: 30px;
   flex-wrap: wrap;
@@ -80,20 +82,30 @@ export const ExercisesName = styled.h1`
   font-weight: 700;
 `;
 
-const SecondSection = () => {
+export default function SecondSection() {
+  const Ref:any = useRef(null);
+  const dispatch = useDispatch();
+  const handleSearch = (e:any) => {
+    e.preventDefault();
+    setTimeout(() => {
+      dispatch(EXERCISENAME(Ref?.current?.value));
+      Ref.current.value = "";
+      window.scrollTo({ top: 1700, behavior: "smooth" });
+    }, 200);
+   }
   const [Value, loading, error] = useDocument(
     doc(db, "List of bodyparts", "result")
   );
-  if (error) return <h1>error 404</h1>;
-  if (loading) return <h1>omar</h1>;
+  if (error) console.log(error);
+  if (loading) return <Loading />;
   return (
-    <Main>
+    <Main style={{  animation: "animate 1s 1" , transition: "all 1s ease-in-out"}}>
       <Text>
         Awesome Exercises You <br /> Should Know
       </Text>
-      <SearchBox>
-        <SearchBar placeholder="Search Exercises" />
-        <SearchButton>Search</SearchButton>
+      <SearchBox onSubmit={handleSearch}>
+        <SearchBar ref={Ref} placeholder="Search Exercises" />
+        <SearchButton onClick={handleSearch}>Search</SearchButton>
       </SearchBox>
       <CardsBox>
         <ForTesting/>
@@ -102,4 +114,3 @@ const SecondSection = () => {
   );
 };
 
-export default SecondSection;

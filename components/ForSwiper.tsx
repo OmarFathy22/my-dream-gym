@@ -1,6 +1,6 @@
-import React, { useRef, useState } from "react";
+import React from "react";
 // Import Swiper React components
-import { Swiper, SwiperSlide } from "swiper/react";
+import { Swiper } from "swiper/react";
 
 // Import Swiper styles
 import "swiper/css";
@@ -9,10 +9,9 @@ import "swiper/css/navigation";
 
 
 // import required modules
-import { Autoplay, Pagination, Navigation , EffectCube } from "swiper";
+import { Autoplay, Pagination , EffectCube } from "swiper";
 import Move from "@/components/MoveSlider";
 export default function App({SlideRef , children}:any) {
-  // const SlideRef: any = useRef();
   const handleNext = () => {
     SlideRef.current.swiper.slideNext();
   };
@@ -35,11 +34,10 @@ export default function App({SlideRef , children}:any) {
           shadowScale: 0.94,
         }}
         autoplay={{
-          delay: 7000,
+          delay: 4000,
           disableOnInteraction: false,
         }}
-        // pagination={true}
-        modules={[EffectCube, Pagination]}
+        modules={[EffectCube, Pagination , Autoplay]}
         className="mySwiper-1!h-[420px] !w-[350px] !flex !justify-center !items-center"
       >
         {children}
