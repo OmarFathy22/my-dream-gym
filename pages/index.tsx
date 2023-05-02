@@ -1,31 +1,40 @@
-'use client';
-import FirstSection from "@/components/FirstSection";
-import SecondSection from "./SecondSection/index";
-import ThirdSection from "./ThirdSection";
-import Footer from "@/components/Footer";
+"use client";
 import { useState } from "react";
-import Loading from "./Loading";
+import dynamic from "next/dynamic";
+import { Suspense } from "react";
+import Loading from "@/components/Loading";
+const SecondSection = dynamic(() => import("@/components/SecondSection"), {
+  ssr: false,
+  suspense: true,
+});
+const ThirdSection = dynamic(() => import("@/components/ThirdSection"), {
+  ssr: false,
+  suspense: true,
+});
 
+import FirstSection from "@/components/FirstSection";
+// import SecondSection from "@/components/SecondSection";
+// import ThirdSection from "@/components/ThirdSection";
+// import Footer from "@/components/Footer";
+function Home() {
 
-function Home() {   
-  const [loading, setloading] = useState(true)
+  const [loading, setloading] = useState(true);
   setTimeout(() => {
-    setloading(false)
+    setloading(false);
   }, 1000);
-  if(loading){
-    return <Loading/>
+  if (loading) {
+    return <Loading />;
   }
   return (
     <div className="overflow-hidden">
-      <FirstSection />
-      <SecondSection/> 
-      <ThirdSection/>
-      <Footer/>
+      <Suspense fallback={<Loading />}>
+        <FirstSection />
+        <SecondSection />
+        <ThirdSection />
+      </Suspense>
     </div>
   );
 }
-
-
 
 // export const getStaticProps = async () => {
 //   const options = {
@@ -44,7 +53,5 @@ function Home() {
 //     }
 //   }
 // }
-
-
 
 export default Home;
