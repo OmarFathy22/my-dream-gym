@@ -11,7 +11,7 @@ import "swiper/css/navigation";
 // import required modules
 import { Autoplay, Pagination , EffectCube } from "swiper";
 import Move from "@/components/MoveSlider";
-export default function App({SlideRef , children}:any) {
+export default function App({SlideRef , Delay , children}:any) {
   const handleNext = () => {
     SlideRef.current.swiper.slideNext();
   };
@@ -34,7 +34,7 @@ export default function App({SlideRef , children}:any) {
           shadowScale: 0.94,
         }}
         autoplay={{
-          delay: 4000,
+          delay: Delay,
           disableOnInteraction: false,
         }}
         modules={[EffectCube, Pagination , Autoplay]}

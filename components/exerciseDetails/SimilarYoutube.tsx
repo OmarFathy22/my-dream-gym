@@ -73,7 +73,7 @@ const SecondSection = ({ NameOfExercise  }: any) => {
         Similar <span className="text-red-500">Youtube </span> Videos
       </h1>
       <ExercisesContainer>
-        {Youtube.length > 1 && <ForSwiper SlideRef={SlideRef}>
+        {Youtube.length > 1 && <ForSwiper SlideRef={SlideRef} Delay = {600000}>
           {Youtube.map((item: any, index: number) => {
             return (
               <ExerciseCard key={index} className="!rounded-lg">

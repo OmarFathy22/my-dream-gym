@@ -45,7 +45,7 @@ const SecondSection = ({ equipment  }: any) => {
         Similar <span className="text-red-500">Equipment</span> Exerscises
       </h1>
       <ExercisesContainer>
-        {value?.data() &&<ForSwiper SlideRef={SlideRef}>
+        {value?.data() &&<ForSwiper SlideRef={SlideRef} Delay = {7000}>
           {value?.data()?.Array?.map((item: any, index: number) => {
             return (
               <ExerciseCard
