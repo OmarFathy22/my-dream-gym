@@ -13,7 +13,6 @@ import ForTesting from "../ForTesting";
 import Loading from "@/components/Loading";
 import { useDispatch } from "react-redux";
 import { EXERCISENAME } from "@/components/features/exerciseName";
-type Props = {};
 const Main = styled.main`
   margin: 200px 0 150px 0;
   width: 100%;

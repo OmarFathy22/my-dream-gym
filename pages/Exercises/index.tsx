@@ -1,9 +1,6 @@
 import React from 'react'
-import dynamic from 'next/dynamic';
-const ONE = dynamic(() => import("@/components/exerciseDetails/ONE"), {
-  ssr: false,
-  suspense: true,
-});
+import ONE from '@/components/exerciseDetails/ONE';
+import Head from 'next/head';
 
 
 type Props = {}
@@ -11,6 +8,9 @@ type Props = {}
 const index = (props: Props) => {
   return (
     <div>
+         <Head>
+       <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests"/>
+       </Head>
       <ONE/>
     </div>
   )

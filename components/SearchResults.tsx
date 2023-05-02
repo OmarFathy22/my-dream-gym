@@ -18,7 +18,7 @@ const SearchResults = () => {
     setselectedNum((selected + 1) * recordsNum);
     window.scrollTo({ top: 1700, behavior: "smooth" });
   };
-  if(error)console.log(error);
+  if(error) console.log(error);;
   if(loading)return <Loading/>;
   const filtered = value?.data()?.Array?.filter((item: any) => {
     return (
@@ -27,7 +27,6 @@ const SearchResults = () => {
       item?.target?.toLowerCase().includes(Search?.toLowerCase())
     )
   })
-  console.log(filtered)
   return (
     <div>
       <ExercisesContainer>

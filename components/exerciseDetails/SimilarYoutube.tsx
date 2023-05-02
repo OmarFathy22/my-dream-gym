@@ -8,16 +8,12 @@ import { SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
 import axios from "axios";
-import { ExerciseCard } from "@/components/ThirdSection";
-import { ExercisesContainer } from "@/components/ThirdSection";
+import { ExerciseCard } from "@/components/ThirdSection/index";
+import { ExercisesContainer } from "@/components/ThirdSection/index";
 import "swiper/swiper-bundle.min.css";
-import dynamic from "next/dynamic";
-import Loading from "@/components/Loading";
-const ForSwiper = dynamic(() => import("@/components/ForSwiper"), {
-  ssr: false,
-  loading: () => <Loading />,
-  suspense: true,
-});
+import Loading from "@/components/Loading/index";
+import ForSwiper from "../ForSwiper";
+
 
 
 type Props = {};
@@ -59,7 +55,7 @@ const SecondSection = ({ NameOfExercise  }: any) => {
         localStorage.setItem("Youtube", JSON.stringify(response.data.results));
         localStorage.setItem("loading", "false");
       } catch (error) {
-        console.error(error);
+        console.log(error);
       }
     };
     func();

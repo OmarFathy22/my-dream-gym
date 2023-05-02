@@ -1,37 +1,28 @@
 "use client";
-import { useState } from "react";
-import dynamic from "next/dynamic";
-import { Suspense } from "react";
-import Loading from "@/components/Loading";
-const SecondSection = dynamic(() => import("@/components/SecondSection"), {
-  ssr: false,
-  suspense: true,
-});
-const ThirdSection = dynamic(() => import("@/components/ThirdSection"), {
-  ssr: false,
-  suspense: true,
-});
-
+// import { useState } from "react";
 import FirstSection from "@/components/FirstSection";
-// import SecondSection from "@/components/SecondSection";
-// import ThirdSection from "@/components/ThirdSection";
-// import Footer from "@/components/Footer";
+import Footer from "@/components/Footer";
+import SecondSection from "@/components/SecondSection";
+import ThirdSection from "@/components/ThirdSection";
+import Head from "next/head";
 function Home() {
 
-  const [loading, setloading] = useState(true);
-  setTimeout(() => {
-    setloading(false);
-  }, 1000);
-  if (loading) {
-    return <Loading />;
-  }
+  // const [loading, setloading] = useState(true);
+  // setTimeout(() => {
+  //   setloading(false);
+  // }, 1000);
+  // if (loading) {
+  //   return <Loading />;
+  // }
   return (
     <div className="overflow-hidden">
-      <Suspense fallback={<Loading />}>
+       <Head>
+       <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests"/>
+       </Head>
         <FirstSection />
         <SecondSection />
         <ThirdSection />
-      </Suspense>
+        <Footer/>
     </div>
   );
 }

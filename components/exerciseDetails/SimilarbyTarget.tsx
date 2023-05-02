@@ -15,13 +15,9 @@ import { useDocument } from "react-firebase-hooks/firestore";
 import { ExerciseCard, ExerciseName, Target } from "@/components/ThirdSection";
 import { ExercisesContainer } from "@/components/ThirdSection";
 import "swiper/swiper-bundle.min.css";
-import dynamic from "next/dynamic";
 import Loading from "@/components/Loading";
-const ForSwiper = dynamic(() => import("@/components/ForSwiper"), {
-  ssr: false,
-  loading: () => <Loading />,
-  suspense: true,
-});
+import ForSwiper from "../ForSwiper";
+
 
 
 const Main = styled.div`
@@ -39,7 +35,7 @@ const SecondSection = ({ target  }: any) => {
   );
 
   const SlideRef: any = useRef();
-  if (error) return <h1>error</h1>;
+  if (error) console.log(error);
   if(loading){
     return <Loading/>
   }

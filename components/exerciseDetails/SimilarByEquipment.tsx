@@ -16,13 +16,7 @@ import { ExerciseCard, ExerciseName, Target } from "@/components/ThirdSection";
 import { ExercisesContainer } from "@/components/ThirdSection";
 import "swiper/swiper-bundle.min.css";
 import Loading from "@/components/Loading";
-const ForSwiper = dynamic(() => import("@/components/ForSwiper"), {
-  ssr: false,
-  loading: () => <Loading />,
-  suspense: true,
-});
-
-import dynamic from "next/dynamic";
+import ForSwiper from "../ForSwiper";
 
 type Props = {};
 const Main = styled.div`
@@ -40,7 +34,7 @@ const SecondSection = ({ equipment  }: any) => {
   );
   const SlideRef: any = useRef();
   let Id = new Date().getTime();
-  if (error) return <h1>error</h1>;
+  if (error) console.log(error);;
   if(loading){
     return <Loading/>
   }
