@@ -11,7 +11,6 @@ import SimilarbyTarget from "./SimilarbyTarget";
 import SimilarByEquipment from "./SimilarByEquipment";
 import SimilarYoutube from "./SimilarYoutube";
 import Footer from "@/components/Footer";
-
 const Section = styled.section`
   width: 100%;
   display: flex;
@@ -43,12 +42,12 @@ const Details = () => {
   }
   return (
   
-  <div>
+  <div className="pt-20">
      {value?.data() &&
   <div>
        <ParentSection>
        <Main className="flex items-center">
-         <Section >
+         <Section  style={{  animation: "animate 1s 1" , transition: "all 1s"}} >
            <h1 className="text-[40px] font-bold  ">{value?.data()?.SELECTEDITEM.name}</h1>
            {value?.data()?.SELECTEDITEM.gifUrl && (
              <Image

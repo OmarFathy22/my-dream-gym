@@ -18,6 +18,12 @@ const ForTesting = () => {
     doc(db, "List of bodyparts", "result")
   );
   const dispatch = useDispatch();
+  const handleClickScroll = () => {
+    const element = document.getElementById('ThirdSection');
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
 
   return (
     <div>
@@ -31,9 +37,7 @@ const ForTesting = () => {
           return (
             <SwiperSlide
               onClick={() => {
-                setTimeout(() => {
-                  window.scrollTo({ top: 1700, behavior: "smooth" });
-                }, 200);
+                handleClickScroll()
                 dispatch(EXERCISENAME(exercise));
               }}
               className="swiper-slide-1 !flex !justify-center !items-center"

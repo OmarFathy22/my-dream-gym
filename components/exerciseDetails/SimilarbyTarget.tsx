@@ -9,7 +9,7 @@ import styled from "styled-components";
 import { SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
-import { doc, setDoc } from "firebase/firestore";
+import { doc, setDoc, updateDoc } from "firebase/firestore";
 import { db } from "@/firebase";
 import { useDocument } from "react-firebase-hooks/firestore";
 import { ExerciseCard, ExerciseName, Target } from "@/components/ThirdSection";
@@ -53,16 +53,12 @@ const SecondSection = ({ target  }: any) => {
               <ExerciseCard
               key={item.id}
                 className=" !rounded-lg"
-                onClick={async () => {
-                  await setDoc(doc(db, "ITEM", "res"), {
-                    SELECTEDITEM: item,
-                  });
-                }}
+                
               >
                 <SwiperSlide
                   key={index}
                   onClick={async () => {
-                    await setDoc(doc(db, "ITEM", "res"), {
+                    await updateDoc(doc(db, "ITEM", "res"), {
                       SELECTEDITEM: item,
                     });
                   }}
@@ -71,7 +67,7 @@ const SecondSection = ({ target  }: any) => {
                   
                   !h-[100%] !w-full !flex !justify-center mb-10"
                 >
-                  <Link
+                  <Link prefetch={false}
                     className="!rounded-lg !h-full !w-full bg-white"
                     href={"/" + item?.id}
                   >
@@ -81,7 +77,7 @@ const SecondSection = ({ target  }: any) => {
                       priority={true}
                       height={100}
                       width={100}
-                      src={item?.gifUrl}
+                      src={item?.gifUrl[4] === 's' ? item.gifUrl :  item.gifUrl.slice(0,4) + 's' + item.gifUrl.slice(4) }
                       alt={"icon"}
                     />
                     <div className="flex pl-5 pr-3 gap-2">

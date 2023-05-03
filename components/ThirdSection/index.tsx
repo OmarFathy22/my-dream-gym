@@ -56,7 +56,7 @@ export const ExerciseName = styled.div`
 `
 export const ThirdSection = () => {
   return (
-    <div style={{  animation: "animate 1s 1" , transition: "all 1s ease-in-out"}}>
+    <div id='ThirdSection' style={{  animation: "animate 1s 1" , transition: "all 1s ease-in-out"}}>
       <SearchResults/>
     </div>
   )

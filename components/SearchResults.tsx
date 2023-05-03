@@ -1,5 +1,5 @@
 import React, {useState } from 'react'
-import { doc, setDoc } from "firebase/firestore"; 
+import { doc, setDoc, updateDoc } from "firebase/firestore"; 
 import { db } from '@/firebase';
 import { ExerciseCard, ExerciseName, ExercisesContainer, Target } from '@/components/ThirdSection';
 import Link from 'next/link';
@@ -33,16 +33,16 @@ const SearchResults = () => {
           {filtered?.slice(selectedNum - recordsNum, selectedNum).map((item: any, index: number) => {
             return (
               <ExerciseCard key={index} onClick={async () => {
-                await setDoc(doc(db, "ITEM", "res"), {
+                await updateDoc(doc(db, "ITEM", "res"), {
                   SELECTEDITEM: item,
                 });
               }}>
-                <Link href={'/' + item?.id}>
+                <Link  prefetch={false} href={'/' + item?.id} >
                   <Image 
                     priority
                     height={300}
                     width={300}
-                    src={item?.gifUrl}
+                    src={item?.gifUrl[4] === 's' ? item.gifUrl :  item.gifUrl.slice(0,4) + 's' + item.gifUrl.slice(4) }
                     alt={"icon"} />
                   <div className='flex  gap-2'>
                     <Target>{item?.target}</Target>

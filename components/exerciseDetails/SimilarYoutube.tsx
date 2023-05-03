@@ -1,4 +1,4 @@
-import React, {useLayoutEffect, useRef } from "react";
+import React, {useEffect, useLayoutEffect, useRef, useState } from "react";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
@@ -13,6 +13,7 @@ import { ExercisesContainer } from "@/components/ThirdSection/index";
 import "swiper/swiper-bundle.min.css";
 import Loading from "@/components/Loading/index";
 import ForSwiper from "../ForSwiper";
+
 
 
 
@@ -31,29 +32,39 @@ const Main = styled.div`
 
 
 const SecondSection = ({ NameOfExercise  }: any) => {
-  useLayoutEffect(() => {
+  const [isLoading, setisLoading] = useState(true)
+  const [Data, setData] = useState([]);
+  console.log("Youtube Section" , NameOfExercise);
+  useEffect(() => {
+    console.log("data is" , Data);
+  }, [Data])
+  useEffect(() => {
     localStorage.setItem("Youtube", JSON.stringify([]));
     localStorage.setItem("loading", "false");
     const func = async () => {
       const options = {
-        method: "GET",
-        url: "https://simple-youtube-search.p.rapidapi.com/search",
+        method: 'GET',
+        url: 'https://youtube-v3-alternative.p.rapidapi.com/search',
         params: {
-          query: NameOfExercise + " exercise",
-          safesearch: "false",
+          query:NameOfExercise + " Workout",
+          geo: 'US',
+          lang: 'en'
         },
         headers: {
-          "content-type": "application/octet-stream",
-          "X-RapidAPI-Key":
-            "44a7c0af56msh63e4b6a53bd328cp1544dajsn6b850a3623bb",
-          "X-RapidAPI-Host": "simple-youtube-search.p.rapidapi.com",
-        },
+          'X-RapidAPI-Key': '8922bb81bemsha3476b0f910c70dp1f3246jsn0a9380fb1e3b',
+          'X-RapidAPI-Host': 'youtube-v3-alternative.p.rapidapi.com'
+        }
       };
 
       try {
         const response = await axios.request(options);
-        localStorage.setItem("Youtube", JSON.stringify(response.data.results));
+        // localStorage.setItem("Youtube", JSON.stringify(response.data.data));
         localStorage.setItem("loading", "false");
+        console.log("api array " , response.data.data);
+        // const Youtube = JSON.parse(localStorage.getItem("Youtube") || "[]");
+        // console.log("youtube array " , Youtube);
+        setData(response.data.data)
+
       } catch (error) {
         console.log(error);
       }
@@ -61,9 +72,9 @@ const SecondSection = ({ NameOfExercise  }: any) => {
     func();
   }, [NameOfExercise]);
   const SlideRef: any = useRef();
-  const loading = localStorage.getItem("loading") === "true";
-  const Youtube = JSON.parse(localStorage.getItem("Youtube") || "[]");
-  if(loading){
+  const LOADING = localStorage.getItem("loading") === "true";
+  // const Youtube = JSON.parse(localStorage.getItem("Youtube") || "[]");
+  if(LOADING ){
     return <Loading/>
   }
   return (
@@ -73,8 +84,8 @@ const SecondSection = ({ NameOfExercise  }: any) => {
         Similar <span className="text-red-500">Youtube </span> Videos
       </h1>
       <ExercisesContainer>
-        {Youtube.length > 1 && <ForSwiper SlideRef={SlideRef} Delay = {600000}>
-          {Youtube.map((item: any, index: number) => {
+        { Data.length && <ForSwiper SlideRef={SlideRef} Delay = {600000}>
+          {Data.length && Data.map((item: any, index: number) => {
             return (
               <ExerciseCard key={index} className="!rounded-lg">
                 <SwiperSlide
@@ -83,16 +94,16 @@ const SecondSection = ({ NameOfExercise  }: any) => {
                 >
                   <div className="!rounded-lg !h-[300px] !w-full bg-white"
                   >
-                  {/* <iframe allowFullScreen className="!w-[100%]  !h-[300px] !rounded-lg block" width="420" height="345" src="https://embed.lottiefiles.com/animation/142649">\ */}
-                    <iframe allowFullScreen className="!w-[100%]  !h-[300px] !rounded-lg block" width="420" height="345" src={"https://www.youtube.com/embed/" + item.id}></iframe>
-                  {/* </iframe> */}
+                   {item?.videoId  ?   <iframe allowFullScreen className="!w-[100%]  !h-[300px] !rounded-lg block" width="420" height="345" src={"https://www.youtube.com/embed/" + item?.videoId}></iframe>
+                   : <Loading/>
+                   }
                   </div>
                 </SwiperSlide>
               </ExerciseCard>
             );
           })}
         </ForSwiper>}
-        {Youtube.length < 1 && <h1 className='text-2xl text-center mb-10 font-bold'>No Exercises loaded <br/>Please refresh The Page </h1>}
+        {!Data.length && <h1 className='text-2xl text-center mb-10 font-bold'>No Exercises loaded <br/>Please refresh The Page {NameOfExercise} </h1>}
       </ExercisesContainer>
     </Main>
   );

@@ -12,12 +12,12 @@ const Footer = () => {
   return (
     <div>
       <Head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        {/* <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" />
         <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&display=swap" rel="preconnect" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" />
-        <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Orbitron&display=swap" rel="preconnect" />
+        <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Orbitron&display=swap" rel="preconnect" /> */}
       </Head>
       <footer className='bg-white flex justify-center items-center mt-10   gap-3 py-5 rounded-md border-t-2 border-t-red-500 flex-col '>
         <div className='flex gap-2 items-end'>

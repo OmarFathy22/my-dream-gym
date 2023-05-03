@@ -7,13 +7,6 @@ import ThirdSection from "@/components/ThirdSection";
 import Head from "next/head";
 function Home() {
 
-  // const [loading, setloading] = useState(true);
-  // setTimeout(() => {
-  //   setloading(false);
-  // }, 1000);
-  // if (loading) {
-  //   return <Loading />;
-  // }
   return (
     <div className="overflow-hidden">
        <Head>
