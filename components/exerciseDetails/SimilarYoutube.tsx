@@ -39,8 +39,6 @@ const SecondSection = ({ NameOfExercise  }: any) => {
     console.log("data is" , Data);
   }, [Data])
   useEffect(() => {
-    localStorage.setItem("Youtube", JSON.stringify([]));
-    localStorage.setItem("loading", "false");
     const func = async () => {
       const options = {
         method: 'GET',
@@ -58,11 +56,8 @@ const SecondSection = ({ NameOfExercise  }: any) => {
 
       try {
         const response = await axios.request(options);
-        // localStorage.setItem("Youtube", JSON.stringify(response.data.data));
-        localStorage.setItem("loading", "false");
         console.log("api array " , response.data.data);
-        // const Youtube = JSON.parse(localStorage.getItem("Youtube") || "[]");
-        // console.log("youtube array " , Youtube);
+        setisLoading(false)
         setData(response.data.data)
 
       } catch (error) {
@@ -72,20 +67,17 @@ const SecondSection = ({ NameOfExercise  }: any) => {
     func();
   }, [NameOfExercise]);
   const SlideRef: any = useRef();
-  const LOADING = localStorage.getItem("loading") === "true";
-  // const Youtube = JSON.parse(localStorage.getItem("Youtube") || "[]");
-  if(LOADING ){
+  if(isLoading ){
     return <Loading/>
   }
   return (
     <Main style={{  animation: "animate 1s 1" , transition: "all 1s ease-in-out"}} >
-  
       <h1 className="mobile:text-[24px] tablet:text-[30px] text-center w-full font-bold">
         Similar <span className="text-red-500">Youtube </span> Videos
       </h1>
       <ExercisesContainer>
         { Data.length && <ForSwiper SlideRef={SlideRef} Delay = {600000}>
-          {Data.length && Data.map((item: any, index: number) => {
+          {Data.length > 0 && Data.map((item: any, index: number) => {
             return (
               <ExerciseCard key={index} className="!rounded-lg">
                 <SwiperSlide
@@ -103,7 +95,7 @@ const SecondSection = ({ NameOfExercise  }: any) => {
             );
           })}
         </ForSwiper>}
-        {!Data.length && <h1 className='text-2xl text-center mb-10 font-bold'>No Exercises loaded <br/>Please refresh The Page {NameOfExercise} </h1>}
+        {Data.length < 1 && <h1 className='text-2xl text-center mb-10 font-bold'>No Exercises loaded <br/>Please refresh The Page  </h1>}
       </ExercisesContainer>
     </Main>
   );

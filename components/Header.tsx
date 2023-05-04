@@ -7,57 +7,36 @@ import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
 import { EXERCISENAME } from './features/exerciseName';
 import Link from 'next/link';
+import searchIcon from '../public/assets/icons/icons8-search-50.png'
 const SearchBox = styled.form`
-  /* width: 20%; */
   display: flex;
   flex:1  ;
   margin-top:20px;
-
+  border: 2px solid red;
+  border-radius: 10px;
 `;
 const SearchBar = styled.input`
   width: 50px;
   flex: 9;
-  border: 1px solid #888;
-  border-radius: 2px;
   padding: 5px;
   color: #888;
+  border-radius: 20px;
   &:focus {
     outline: none;
+    color: black;
   }
   @media (min-width:200px) and (max-width:500px)  {
     font-size: 13px;
   }
-`;
-const SearchButton = styled.button`
-  border: none;
-  background-color: #fe3535;
-  color: #e0dede;
-  border-radius: 2px;
-  flex: 2;
 `;
 
 
 function Header() { 
   const Ref:any = useRef(null);
   const dispatch = useDispatch();
-  const [scrollDir , setscrollDir] = useState('down')
-  const [pageElement , setpageElement] = useState(0)
-  const whenScroll = () => {
-    if(document.documentElement.scrollTop >= pageElement || document.documentElement.scrollTop == 0){
-      setscrollDir('down')
-    }
-    else{
-      setscrollDir('up')
-    }
-    setpageElement(document.documentElement.scrollTop)
-    console.log("element" , document.documentElement.scrollTop );
-  }
 
-  if (typeof window !== "undefined") {
-    window.addEventListener('scroll', function() {
-      whenScroll()
-    });
-  }
+
+
 
   
   const handleSearch = (e:any) => {
@@ -69,7 +48,7 @@ function Header() {
   const router = useRouter();
 
   return (
-    <header style={{transition:"all 0.5s"}}  className={((scrollDir === "down") ? "top-0 " : "top-[-100px] ") + 'flex items-center fixed top-0 bg-white  right-[5%] left-[5%] !z-[1000] border-b-2 border-b-red-500 rounded-b-2xl h-[80px]'}>
+    <header style={{transition:"all 0.5s"}}  className={'flex items-center fixed top-0 bg-white  right-[5%] left-[5%] !z-[1000] border-b-2 border-b-red-500 rounded-b-2xl h-[80px]'}>
     <div className='flex pl-5 w-[250px] items-center'>
         <Link  href={"/"} className='mr-10 200screen:mr-7' prefetch shallow> 
           <Image className='w-[50px] h-[50px]' height={70} width={70} src={logo} alt='logo' />
@@ -80,9 +59,11 @@ function Header() {
         </div>
     </div >
     <div className='hidden laptop:flex-[0.2] laptop:block'></div>
-    <SearchBox onSubmit={handleSearch}>
-        <SearchBar className='200screen:mx-[8px] ml-[50px]' ref={Ref} placeholder="Search Exercises" />
-        <SearchButton className='200screen:hidden mr-5' onClick={handleSearch}>Search</SearchButton>
+    <SearchBox className='200screen:mx-[8px] mx-[50px]' onSubmit={handleSearch}>
+        <SearchBar className='' ref={Ref} placeholder="Search.." />
+        <div style={{borderTopRightRadius:"7px" , borderBottomRightRadius:"7px" , backgroundColor:"red"}} className=' 200screen:flex-[2]  px-2 flex justify-center items-center '>
+          <Image className=' w-5 h-5' src={searchIcon} width={20} height={20} alt='search icon'/>
+        </div>
       </SearchBox>
 
     </header>
